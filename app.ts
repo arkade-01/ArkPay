@@ -3,6 +3,8 @@ import allRoutes from "./routes/v1"
 import { errorHandler } from "./middlewares/errorHandler";
 import config from "./config/config";
 import connectToDatabase from "./config/dbConfig";
+import cors from "cors"
+import bodyParser from "body-parser";
 
 
 
@@ -12,6 +14,11 @@ const start = async () => {
         console.log("Connected to MongoDB successfully!");
 
       const app = express()
+
+      //middlewares
+        app.use(cors())
+        app.use(bodyParser.urlencoded({extended:false}))
+        app.use(express.json())
 
       // Declare All the Routes in the application
       app.use('/v1/api', allRoutes)

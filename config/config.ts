@@ -7,6 +7,7 @@ interface Config {
   database: {
     url: string
   }
+  jwtSecret: string
 }	
 
 const config: Config = {
@@ -14,6 +15,7 @@ const config: Config = {
   database: {
     url: process.env.DB_HOST as string || "localhost",
   },
+  jwtSecret: process.env.SECRET as string,
 }
 
 export default config
