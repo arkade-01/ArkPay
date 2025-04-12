@@ -12,4 +12,9 @@ authRouter.post('/signin', signin)
 // Signout Route
 authRouter.post('/signout', signout)
 
+// Forgot Password
+authRouter.post('/forgot-password', (req, res) => {
+    res.send("Forgot Password")
+})
+
 export default authRouter;

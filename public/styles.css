@@ -1,0 +1,99 @@
+/* Email styles */
+  /* Reset styles for email clients */
+  body,
+  table,
+  td,
+  a {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+
+  table,
+  td {
+    mso-table-lspace: 0pt;
+    mso-table-rspace: 0pt;
+  }
+
+  img {
+    -ms-interpolation-mode: bicubic;
+    border: 0;
+  }
+
+  /* Base styles */
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+    font-family: Arial, sans-serif;
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Main container */
+  .email-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Content container */
+  .content {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Logo */
+  .logo {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* Typography */
+  h1 {
+    color: #333333;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  p {
+    color: #666666;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  /* Button */
+  .button {
+    display: inline-block;
+    background-color: #4A6CF7;
+    color: #ffffff !important;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-weight: bold;
+    margin: 20px 0;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .footer p {
+    color: #999999;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  /* Mobile responsiveness */
+  @media screen and (max-width: 600px) {
+    .email-container {
+      width: 100% !important;
+    }
+
+    .content {
+      padding: 20px !important;
+    }
+  }

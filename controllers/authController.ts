@@ -48,3 +48,7 @@ export const signout = (req: Request, res: Response) => {
   res.cookie("jwt", "", { maxAge: 1 }) // 1ms
   res.sendStatus(200).json({ message: "User Signed Out" })
 }
+
+export const forgotPassword = (req: Request, res: Response) => {
+  res.send("Forgot Password")
+}
