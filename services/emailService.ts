@@ -32,12 +32,11 @@ const sendEmail = async (email: string, purpose: EmailPurpose, code: string, cod
     expiryTime: expiryHours, // Add this to fix the template error
     userName: email.split('@')[0], // Basic username from email
     companyName: 'ArkPay',
-    logoUrl: '../public/ArkPay.png',
+    logoUrl: 'https://res.cloudinary.com/dtpy1fmrg/image/upload/v1744505230/ekhebnyymuh10dvdozfq.png',
     currentYear: new Date().getFullYear(),
-    companyAddress: '123 Business St, City, Country',
+    companyAddress: 'Onchain',
     privacyUrl: 'https://yourcompany.com/privacy',
     termsUrl: 'https://yourcompany.com/terms',
-    resetUrl: `https://yourcompany.com/reset-password?token=${code}`
   };
 
   const htmlContent = await ejs.renderFile(templatePath, templateData);
