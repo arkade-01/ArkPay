@@ -1,5 +1,5 @@
 import express from "express"
-import { signup, signin, signout } from "../controllers/authController"
+import { signup, signin, signout, forgotPassword } from "../controllers/authController"
 
 const authRouter = express()
 
@@ -13,8 +13,6 @@ authRouter.post('/signin', signin)
 authRouter.post('/signout', signout)
 
 // Forgot Password
-authRouter.post('/forgot-password', (req, res) => {
-    res.send("Forgot Password")
-})
+authRouter.post('/forgot-password', forgotPassword)
 
 export default authRouter;

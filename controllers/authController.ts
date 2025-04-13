@@ -1,6 +1,7 @@
 import User from "../models/models";
 import {Response, Request} from "express"
 import { createToken } from "../middlewares/jwt";
+import { getOTP } from "../services/emailService";
  
 
 export const signup = async (req: Request, res: Response) => {
@@ -49,6 +50,18 @@ export const signout = (req: Request, res: Response) => {
   res.sendStatus(200).json({ message: "User Signed Out" })
 }
 
-export const forgotPassword = (req: Request, res: Response) => {
-  res.send("Forgot Password")
-}
+export const forgotPassword = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    await getOTP(email, 'reset');
+    res.status(200).json({ message: 'Password reset code sent to your email' });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      res.status(403).json({ error: err.message });
+      console.log("Error Sending Password Reset Code: ", err);
+    } else {
+      res.status(403).json({ error: "An unknown error occurred" });
+      console.log("Error Sending Password Reset Code: Unknown error", err);
+    }
+  }
+};

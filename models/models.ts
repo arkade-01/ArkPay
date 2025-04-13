@@ -8,6 +8,10 @@ export interface IUser extends Document {
   password: string;
   country: string;
   payoutCurrency: string;
+  bankAccount?: number;
+  bankName?: string;
+  resetToken?: string;
+  resetTokenExpiration?: Date;
 }
 
 interface UserInterface extends Model<IUser> {
@@ -36,6 +40,12 @@ const userSchema = new Schema ({
   },
   bankName: {
     type: String,
+  },
+  resetToken: {
+    type: String,
+  },
+  resetTokenExpiration: {
+    type: Date,
   },
 
 })
