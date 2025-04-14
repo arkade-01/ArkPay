@@ -22,6 +22,10 @@ interface Config {
   }
   templatePath: string
   setTemplatePath: (newPath: string) => void
+  offRampAPI: {
+    url: string
+    apiKey: string
+  }
 }
 
 const config: Config = {
@@ -44,7 +48,11 @@ const config: Config = {
   templatePath: path.join(__dirname, '../templates'),
   setTemplatePath: function (newPath: string) {
     this.templatePath = newPath;
-  }
+  },
+  offRampAPI: {
+    url: process.env.OFFRAMP_API as string,
+    apiKey: process.env.OFFRAMP_API_KEY as string,
+  },
 }
 
 export default config
