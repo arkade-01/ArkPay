@@ -1,6 +1,6 @@
 import axios from "axios";
 import config from "../config/config";
-import { InstitutionProps, OrderPayload, RatePayload, RateResponse, VerifyAccountPayload } from "../types/types";
+import { InstitutionProps, OrderPayload, OrderResponse, RatePayload, RateResponse, VerifyAccountPayload } from "../types/types";
 
 const url = config.offRampAPI.url;
 const key = config.offRampAPI.apiKey;
@@ -11,7 +11,7 @@ const api = axios.create({
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': key
+    'API-Key': key
   }
 });
 
@@ -85,7 +85,7 @@ export const fetchRate = async ({
   }
 };
 
-export const createOrder = async (payload: OrderPayload) => {
+export const createOrder = async (payload: OrderPayload): Promise<OrderResponse> => {
   try {
     const response = await api.post(
       `/sender/orders`,
@@ -93,7 +93,7 @@ export const createOrder = async (payload: OrderPayload) => {
     );   
     return response.data.data 
   } catch (error) {
-    console.error("Error fetching supported institutions:", error);
+    console.error("Error fetching supported institutions:", error); //change error log
     throw error;
   }
 }

@@ -41,3 +41,23 @@ export type OrderPayload = {
   feePercent: number
   feeAddress: string
 }
+
+export type OrderResponse = {
+  message: string;
+  status: 'success' | 'error' | 'pending'; // Including common status values
+  data: {
+    id: string;
+    amount: string;
+    token: string;
+    network: string;
+    receiveAddress: string;
+    validUntil: string;
+    senderFee: string;
+    transactionFee: string;
+    reference: string;
+  }
+}
+
+export type Transaction = {
+  
+}

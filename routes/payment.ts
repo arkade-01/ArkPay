@@ -1,5 +1,5 @@
 import express from "express"
-import { banks, currencies, getRate, verifyAccount } from "../controllers/paymentController"
+import { banks, createOrderController, currencies, getRate, verifyAccount } from "../controllers/paymentController"
 
 const payRouter = express()
 
@@ -10,5 +10,7 @@ payRouter.get('/currencies', currencies)
 payRouter.get('/banks', banks)	
 
 payRouter.post('/account-name', verifyAccount)
+
+payRouter.post('/createOrder', createOrderController)
 
 export default payRouter

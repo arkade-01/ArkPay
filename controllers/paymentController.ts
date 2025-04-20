@@ -1,7 +1,7 @@
 import { get } from "http";
-import { fetchAccountName, fetchRate, fetchSupportedCurrencies, getInstitutions } from "../services/paymentHelper";
+import { createOrder, fetchAccountName, fetchRate, fetchSupportedCurrencies, getInstitutions } from "../services/paymentHelper";
 import { Response, Request } from "express"
-import { VerifyAccountPayload } from "../types/types";
+import { OrderPayload, RatePayload, RateResponse, VerifyAccountPayload } from "../types/types";
 
 
 export const getRate = async (req: Request, res: Response) => {
@@ -69,6 +69,44 @@ export const currencies = async (req: Request, res: Response) => {
       res.status(403).json({ error: "An unknown error occurred" });
       console.log("Error Fetching Currencies: Unknown error", err);
     }
+  }
+}
+
+export const createOrderController = async (req: Request, res: Response) => {
+  try {
+    // There's a syntax error in your fetchRate call
+    const rate : RateResponse  = await fetchRate ({
+      token: "USDT",
+      currency: "NGN",
+      amount: 1
+    });
+
+    const payload: OrderPayload = {
+      amount: req.body.amount,
+      rate: rate.data,
+      network: req.body.network,
+      token: req.body.token,
+      recipient: req.body.recipient, // This is properly typed as Recipient
+      returnAddress: req.body.returnAddress,
+      reference: req.body.reference,
+      feePercent: req.body.feePercent,
+      feeAddress: req.body.feeAddress
+    };
+
+    const order = await createOrder(payload);
+
+    res.status(200).json({
+      message: "Payment order initiated successfully",
+      status: "success",
+      data: order
+    });
+  } catch (error) {
+     res.status(500).json({
+      message: "Failed to create payment order",
+      status: "error",
+      data: null
+    });
+    console.log(error)
   }
 }
 
