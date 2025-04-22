@@ -76,7 +76,7 @@ export const createOrderController = async (req: Request, res: Response) => {
   try {
     // There's a syntax error in your fetchRate call
     const rate : RateResponse  = await fetchRate ({
-      token: "USDT",
+      token: "USDC",
       currency: "NGN",
       amount: 1
     });
