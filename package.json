@@ -24,6 +24,7 @@
     "nodemailer": "^6.10.0",
     "passport-local": "^1.0.0",
     "ts-migrate-mongoose": "^4.0.8",
+    "tsx": "^4.19.3",
     "validator": "^13.15.0"
   },
   "devDependencies": {

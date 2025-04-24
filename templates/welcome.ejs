@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to <%= companyName %>
+  </title>
+  <link rel="stylesheet" href="../view/styles.css">
+</head>
+
+<body>
+  <div class="email-container">
+    <div style="padding: 20px;"></div>
+    <div class="content">
+      <div class="logo" style="text-align: center; margin-bottom: 20px;">
+        <img src="<%= logoUrl %>" alt="<%= companyName %> Logo" width="150">
+      </div>
+
+      <h1 style="color: #333333; font-size: 24px; margin-bottom: 20px;">Welcome to <%= companyName %>!</h1>
+
+      <p style="color: #666666; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">Hello <%= userName %>,</p>
+
+      <p style="color: #666666; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">Thank you for signing up with
+        <%= companyName %>. We're excited to have you on board! Your account has been successfully created and is ready
+          to use.</p>
+
+      <h2 style="color: #333333; font-size: 20px; margin-top: 25px; margin-bottom: 15px;">Your API Key</h2>
+
+      <p style="color: #666666; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">Below is your API key that
+        you'll need for making requests to our services:</p>
+
+      <div class="code-container"
+        style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; font-family: monospace; margin-bottom: 20px; text-align: center; font-size: 18px;">
+        <%= apiKey %>
+      </div>
+
+      <div
+        style="background-color: #fff4e5; border-left: 4px solid #ff9800; padding: 15px; margin: 25px 0; border-radius: 3px;">
+        <p style="color: #e65100; font-weight: bold; margin: 0 0 10px 0;">⚠️ Important:</p>
+        <p style="color: #663c00; margin: 0; font-size: 14px;">Please store this API key safely. If you lose it, you
+          will need to reset it, which will invalidate your previous key and require updating any integrations. We
+          cannot recover this key for you once it's stored in our system.</p>
+      </div>
+
+      <h3 style="color: #333333; font-size: 18px; margin-top: 25px; margin-bottom: 15px;">How to Use Your API Key</h3>
+
+      <p style="color: #666666; font-size: 16px; line-height: 1.5; margin-bottom: 10px;">Include your API key in the
+        header of your HTTP requests:</p>
+
+      <div
+        style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; font-family: monospace; margin-bottom: 20px;">
+        X-API-Key: <%= apiKey %>
+      </div>
+
+      <h3 style="color: #333333; font-size: 18px; margin-top: 25px; margin-bottom: 15px;">Getting Started</h3>
+
+      <p style="color: #666666; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">Visit our <a
+          href="<%= apiDocsUrl %>" style="color: #4285f4; text-decoration: none;">API documentation</a> to learn how to
+        make your first API call and explore all available endpoints.</p>
+
+      <p style="color: #666666; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">If you have any questions or
+        need assistance, don't hesitate to contact our support team.</p>
+
+      <p style="color: #666666; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">Welcome aboard!<br>The <%=
+          companyName %> Team</p>
+    </div>
+
+    <div class="footer">
+      <p>&copy; <%= currentYear %>
+          <%= companyName %>. All rights reserved.</p>
+      <p>
+        <%= companyAddress %><br>
+          <a href="<%= privacyUrl %>" style="color: #999999;">Privacy Policy</a> |
+          <a href="<%= termsUrl %>" style="color: #999999;">Terms of Service</a> |
+          <a href="<%= supportUrl %>" style="color: #999999;">Contact Support</a>
+      </p>
+    </div>
+  </div>
+</body>
+
+</html>

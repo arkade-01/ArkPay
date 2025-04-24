@@ -6,12 +6,23 @@ export interface IUser extends Document {
   _id: string;
   email: string;
   password: string;
+  apiKey: string | null;
+  apiUsage: ApiUsage;
   country: string;
   payoutCurrency: string;
   bankAccount?: number;
   bankName?: string;
   resetToken?: string;
   resetTokenExpiration?: Date;
+
+  incrementApiUsage: () => Promise<IUser>;
+}
+
+interface ApiUsage {
+  dates: {
+    [date: string]: number;  // Date string -> number of calls
+  };
+  totalCalls: number;
 }
 
 interface UserInterface extends Model<IUser> {
@@ -27,6 +38,14 @@ const userSchema = new Schema ({
   password: {
     type: String,
     required:[true, 'Enter a valid password, Minimum of 8 Characters']
+  },
+  apiKey: {
+    type: String,
+    default: null,
+  },
+  apiUsage: {
+    dates: {type: Map, of: Number, default: {},},
+    totalCalls: {type: Number, default: 0}
   },
   country: {
     type: String,
@@ -48,13 +67,29 @@ const userSchema = new Schema ({
     type: Date,
   },
 
-})
+}, {timestamps: true})
 
 userSchema.pre('save', async function(next) {
   const salt = await  bcrypt.genSalt()
   this.password = await bcrypt.hash(this.password, salt)
+  this.apiKey = await bcrypt.hash(this.apiKey, salt)
   next()
 })
+
+userSchema.methods.incrementApiUsage = async function () {
+  const today = new Date().toISOString().split('T')[0];
+
+  // Initialize today's count if it doesn't exist
+  const currentCount = this.apiUsage.dates.get(today) || 0;
+
+  // Update the count for today
+  this.apiUsage.dates.set(today, currentCount + 1);
+
+  // Increment total calls
+  this.apiUsage.totalCalls += 1;
+
+  return this.save();
+};
 
 userSchema.statics.signIn = async function(email: string, password: string) {
   const user = await this.findOne({ email })

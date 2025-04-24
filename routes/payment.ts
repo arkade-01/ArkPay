@@ -1,16 +1,17 @@
 import express from "express"
 import { banks, createOrderController, currencies, getRate, verifyAccount } from "../controllers/paymentController"
+import { validateKey } from "../middlewares/auth"
 
 const payRouter = express()
 
-payRouter.get('/', getRate)
+payRouter.get('/', validateKey, getRate)
 
-payRouter.get('/currencies', currencies)
+payRouter.get('/currencies', validateKey, currencies)
 
-payRouter.get('/banks', banks)	
+payRouter.get('/banks', validateKey, banks)	
 
-payRouter.post('/account-name', verifyAccount)
+payRouter.post('/account-name', validateKey, verifyAccount)
 
-payRouter.post('/createOrder', createOrderController)
+payRouter.post('/createOrder', validateKey, createOrderController)
 
 export default payRouter

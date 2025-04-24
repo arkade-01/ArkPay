@@ -1,4 +1,3 @@
-import { get } from "http";
 import { createOrder, fetchAccountName, fetchRate, fetchSupportedCurrencies, getInstitutions } from "../services/paymentHelper";
 import { Response, Request } from "express"
 import { OrderPayload, RatePayload, RateResponse, VerifyAccountPayload } from "../types/types";
@@ -74,9 +73,9 @@ export const currencies = async (req: Request, res: Response) => {
 
 export const createOrderController = async (req: Request, res: Response) => {
   try {
-    // There's a syntax error in your fetchRate call
+    // Fetch the rate before creating the order
     const rate : RateResponse  = await fetchRate ({
-      token: "USDC",
+      token: req.body.token,
       currency: "NGN",
       amount: 1
     });
