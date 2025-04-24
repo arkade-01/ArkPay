@@ -123,3 +123,42 @@ export const resetPassword = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+export const resetAPIKey = async (req: Request, res: Response) => {
+  try {
+    // The user ID is available from the JWT token
+    const userId = req.user._id;
+
+    // Generate new API key
+    const newApiKey = genKey();
+
+    // Get the user
+    const user = await User.findById(userId);
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return
+    }
+
+    // Update the API key  
+    user.apiKey = newApiKey;
+
+    // Save the user - the pre-save hook will hash the API key
+    await user.save();
+
+    // Send the new API key to the user   
+    await sendApiKeyEmail(user.email, newApiKey);
+
+     res.status(200).json({
+      message: 'API key reset successful',
+      // apiKey: newApiKey // Optionally return the key in the response too
+    });
+    return
+  } catch (error) {
+    console.error('Error resetting API key:', error);
+     res.status(500).json({
+      error: 'Failed to reset API key',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+    return
+  }
+}

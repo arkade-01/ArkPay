@@ -5,6 +5,8 @@ import config from "./config/config";
 import connectToDatabase from "./config/dbConfig";
 import cors from "cors"
 import bodyParser from "body-parser";
+import cookieParser from 'cookie-parser';
+
 
 
 
@@ -17,6 +19,7 @@ const start = async () => {
 
       //middlewares
         app.use(cors())
+        app.use(cookieParser())
         app.use(bodyParser.urlencoded({extended:false}))
         app.use(express.json())
 
