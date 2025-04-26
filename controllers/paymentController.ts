@@ -1,4 +1,4 @@
-import { createOrder, fetchAccountName, fetchRate, fetchSupportedCurrencies, getInstitutions } from "../services/paymentHelper";
+import { checkOrderStatus, createOrder, fetchAccountName, fetchRate, fetchSupportedCurrencies, getInstitutions } from "../services/paymentHelper";
 import { Response, Request } from "express"
 import { OrderPayload, RatePayload, RateResponse, VerifyAccountPayload } from "../types/types";
 
@@ -109,3 +109,19 @@ export const createOrderController = async (req: Request, res: Response) => {
   }
 }
 
+export const checkOrderStatusController = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id as string;
+    const orderStatus = await checkOrderStatus(id);
+    res.status(200).json({
+      message: "Order status fetched successfully",
+      status: orderStatus,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch order status",
+      status: error,
+    });
+    console.log(error)
+  }
+}

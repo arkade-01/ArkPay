@@ -1,5 +1,5 @@
 import express from "express"
-import { banks, createOrderController, currencies, getRate, verifyAccount } from "../controllers/paymentController"
+import { banks, checkOrderStatusController, createOrderController, currencies, getRate, verifyAccount } from "../controllers/paymentController"
 import { validateKey } from "../middlewares/auth"
 
 const payRouter = express()
@@ -13,5 +13,7 @@ payRouter.get('/banks', validateKey, banks)
 payRouter.post('/account-name', validateKey, verifyAccount)
 
 payRouter.post('/createOrder', validateKey, createOrderController)
+
+payRouter.get('/checkOrderStatus/:id', validateKey, checkOrderStatusController)
 
 export default payRouter

@@ -69,12 +69,21 @@ const userSchema = new Schema ({
 
 }, {timestamps: true})
 
-userSchema.pre('save', async function(next) {
-  const salt = await  bcrypt.genSalt()
-  this.password = await bcrypt.hash(this.password, salt)
-  this.apiKey = await bcrypt.hash(this.apiKey, salt)
-  next()
-})
+userSchema.pre('save', async function (next) {
+  // Only hash the password if it's modified or new
+  if (this.isModified('password')) {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
+  }
+
+  // Only hash the API key if it's modified or new
+  if (this.isModified('apiKey') && this.apiKey) {
+    const salt = await bcrypt.genSalt();
+    this.apiKey = await bcrypt.hash(this.apiKey, salt);
+  }
+
+  next();
+});
 
 userSchema.methods.incrementApiUsage = async function () {
   const today = new Date().toISOString().split('T')[0];
