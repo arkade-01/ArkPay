@@ -1,0 +1,85 @@
+import { genKey } from "../middlewares/auth";
+import User from "../models/models";
+import {Response, Request} from "express"
+import { sendApiKeyEmail } from "../services/emailService";
+
+
+export const fetchUser = async (req: Request, res: Response) => {
+  const userId = req.user._id;
+  try {
+    const user = await User.findById(userId)
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return
+    }
+    res.status(200).json({user})
+    return
+  } catch (error) {
+  res.status(500).json({ error: error });
+    return
+  }
+}
+
+export const updateUserPayout = async (req: Request, res: Response) => {
+  const userId = req.user._id;
+  const { payoutCurrency, bankName, bankAccountNumber, accountName, institutionCode } = req.body;
+  try {
+    const user = await User.findById(userId)
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return
+    }
+    user.payoutCurrency = payoutCurrency;
+    user.bankName = bankName;
+    user.bankAccountNumber = bankAccountNumber;
+    user.accountName = accountName;
+    user.institutionCode = institutionCode;
+
+    await user.save();
+    res.status(200).json({ message: 'User updated successfully' });
+    return
+  } catch (error) {
+    res.status(500).json({ error: error });
+    return
+  }
+}
+
+
+export const resetAPIKey = async (req: Request, res: Response) => {
+  try {
+    // The user ID is available from the JWT token
+    const userId = req.user._id;
+
+    // Generate new API key
+    const newApiKey = genKey();
+
+    // Get the user
+    const user = await User.findById(userId);
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return
+    }
+
+    // Update the API key  
+    user.apiKey = newApiKey;
+
+    // Save the user - the pre-save hook will hash the API key
+    await user.save();
+
+    // Send the new API key to the user   
+    await sendApiKeyEmail(user.email, newApiKey);
+
+    res.status(200).json({
+      message: 'API key reset successful',
+      // apiKey: newApiKey // Optionally return the key in the response too
+    });
+    return
+  } catch (error) {
+    console.error('Error resetting API key:', error);
+    res.status(500).json({
+      error: 'Failed to reset API key',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+    return
+  }
+}

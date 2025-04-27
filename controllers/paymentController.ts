@@ -1,6 +1,8 @@
 import { checkOrderStatus, createOrder, fetchAccountName, fetchRate, fetchSupportedCurrencies, getInstitutions } from "../services/paymentHelper";
 import { Response, Request } from "express"
 import { OrderPayload, RatePayload, RateResponse, VerifyAccountPayload } from "../types/types";
+import { userInfo } from "os";
+import User from "../models/models";
 
 
 export const getRate = async (req: Request, res: Response) => {
@@ -73,6 +75,16 @@ export const currencies = async (req: Request, res: Response) => {
 
 export const createOrderController = async (req: Request, res: Response) => {
   try {
+
+    const user = await User.findById(req.body.userId);
+    if (!user || !user.institutionCode || !user.bankAccountNumber || !user.accountName) {
+      res.status(400).json({
+        message: "Missing required user banking information",
+        status: "error"
+      });
+      return
+    }
+    // Check if the user has a valid API key
     // Fetch the rate before creating the order
     const rate : RateResponse  = await fetchRate ({
       token: req.body.token,
@@ -85,7 +97,12 @@ export const createOrderController = async (req: Request, res: Response) => {
       rate: rate.data,
       network: req.body.network,
       token: req.body.token,
-      recipient: req.body.recipient, // This is properly typed as Recipient
+      recipient: {
+        institution: user.institutionCode,
+        accountIdentifier: user.bankAccountNumber.toString(),
+        accountName: user.accountName,
+        memo: req.body.memo
+      }, // This is properly typed as Recipient
       returnAddress: req.body.returnAddress,
       reference: req.body.reference,
       feePercent: req.body.feePercent,

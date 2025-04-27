@@ -10,7 +10,9 @@ export interface IUser extends Document {
   apiUsage: ApiUsage;
   country: string;
   payoutCurrency: string;
-  bankAccount?: number;
+  bankAccountNumber?: number;
+  accountName?: string;
+  institutionCode?: string;
   bankName?: string;
   resetToken?: string;
   resetTokenExpiration?: Date;
@@ -54,10 +56,16 @@ const userSchema = new Schema ({
   payoutCurrency: {
     type: String,
   },
-  bankAccount: {
+  bankAccountNumber: {
     type: Number,
   },
   bankName: {
+    type: String,
+  },
+  institutionCode: {
+    type: String,
+  },
+  accountName: {
     type: String,
   },
   resetToken: {
