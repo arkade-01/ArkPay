@@ -91,6 +91,7 @@ export const createOrderController = async (req: Request, res: Response) => {
       currency: "NGN",
       amount: 1
     });
+    console.log(rate)
 
     const payload: OrderPayload = {
       amount: req.body.amount,
@@ -110,9 +111,31 @@ export const createOrderController = async (req: Request, res: Response) => {
     };
 
     const order = await createOrder(payload);
+    console.log(order)
+    
+    // Create new transaction object
+    const newTransaction = {
+      orderId: order.id,          // Changed to orderId to match interface
+      amount: Number(order.amount),
+      rate: Number(rate.data),
+      token: order.token,
+      network: order.network,
+      receiveAddress: order.receiveAddress,
+      validUntil: new Date(order.validUntil)
+    };
+
+    // Initialize transactions array if it doesn't exist
+    if (!user.transactions) {
+      user.transactions = [];
+    }
+
+    // Add new transaction to array
+    user.transactions.push(newTransaction);
+
+    await user.save();
 
     res.status(200).json({
-      message: "Payment order initiated successfully",
+      message: "Payment order  initiated successfully",
       status: "success",
       data: order
     });

@@ -14,6 +14,7 @@ export interface IUser extends Document {
   accountName?: string;
   institutionCode?: string;
   bankName?: string;
+  transactions: Transaction[]
   resetToken?: string;
   resetTokenExpiration?: Date;
 
@@ -25,6 +26,16 @@ interface ApiUsage {
     [date: string]: number;  // Date string -> number of calls
   };
   totalCalls: number;
+}
+
+interface Transaction {
+  orderId: string
+  amount: number
+  rate: number
+  token: string
+  network: string
+  receiveAddress: string
+  validUntil: Date
 }
 
 interface UserInterface extends Model<IUser> {
@@ -68,6 +79,15 @@ const userSchema = new Schema ({
   accountName: {
     type: String,
   },
+  transactions: [{
+    orderId: String,
+    amount: Number,
+    rate: Number,
+    token: String,
+    network: String,
+    receiveAddress: String,
+    validUntil: Date
+  }],
   resetToken: {
     type: String,
   },
