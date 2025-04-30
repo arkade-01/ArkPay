@@ -1,7 +1,6 @@
 import { checkOrderStatus, createOrder, fetchAccountName, fetchRate, fetchSupportedCurrencies, getInstitutions } from "../services/paymentHelper";
 import { Response, Request } from "express"
-import { OrderPayload, RatePayload, RateResponse, VerifyAccountPayload } from "../types/types";
-import { userInfo } from "os";
+import { OrderPayload,  RateResponse, VerifyAccountPayload } from "../types/types";
 import User from "../models/models";
 
 
@@ -115,6 +114,7 @@ export const createOrderController = async (req: Request, res: Response) => {
     
     // Create new transaction object
     const newTransaction = {
+      createdAt: new Date(),
       orderId: order.id,          // Changed to orderId to match interface
       amount: Number(order.amount),
       rate: Number(rate.data),

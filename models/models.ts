@@ -29,6 +29,7 @@ interface ApiUsage {
 }
 
 interface Transaction {
+  createdAt: Date
   orderId: string
   amount: number
   rate: number
@@ -80,6 +81,7 @@ const userSchema = new Schema ({
     type: String,
   },
   transactions: [{
+    createdAt: Date,
     orderId: String,
     amount: Number,
     rate: Number,
