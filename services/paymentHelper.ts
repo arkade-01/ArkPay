@@ -98,3 +98,16 @@ export const createOrder = async (payload: OrderPayload): Promise<OrderResponse>
   }
 }
 
+export const checkOrderStatus = async (id : string) => {
+  try {
+    const response = await api.get(
+      `sender/orders/${id}`
+    )
+
+    return response.data.data
+  } catch (error) {
+    console.error("Error fetching order status:", error);	
+    throw error;
+  }
+}
+

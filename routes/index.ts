@@ -4,7 +4,7 @@ const homeRouter = express()
 
 homeRouter.get("/", (req: Request, res: Response) => {
   res.send(
-    "ArkPay is Still in Development"
+    "ArkPay is Active"
   )
 })
 

@@ -1,25 +1,37 @@
 import User from "../models/models";
 import {Response, Request} from "express"
-import { createToken } from "../middlewares/jwt";
-import { getOTP } from "../services/emailService";
+import { createToken, genKey } from "../middlewares/auth";
+import { getOTP, sendApiKeyEmail } from "../services/emailService";
  
 
+
 export const signup = async (req: Request, res: Response) => {
-  const { email, password, country } = req.body;
+  const {  firstName, lastName, email, password, country } = req.body;
+  // Generate the API key
+  const apiKey = genKey();
+
   try {
-     const user = await User.create({email, password, country})
-     const token = createToken(user._id)
-     res.cookie("jwt", token, { maxAge: 2 * 24 * 60 * 60 * 1000}) // 2 days // htppOnly - reminder
-     res.status(201)
+    // Store the unhashed API key to send in the email
+    const originalApiKey = apiKey;
+
+    // Create the user - this will hash the API key in the pre-save hook
+    const user = await User.create({ firstName, lastName, email, password, apiKey, country });
+
+    // Send the welcome email with API key after successful user creation
+    await sendApiKeyEmail(email, originalApiKey);
+
+    const token = createToken(user.id);
+    res.cookie("jwt", token, { maxAge: 2 * 24 * 60 * 60 * 1000 }); // 2 days
+    res.status(201).json({ user: user._id });
   } catch (err: unknown) {
     if (err instanceof Error) {
-      res.status(403).json({error: err.message})
-      console.log("Error Creating User: ", err)
+      res.status(403).json({ error: err.message });
+      console.log("Error Creating User: ", err);
     }
     // Handle case where err is not an Error object
     else {
-    res.status(403).json({error: "An unknown error occurred"})
-    console.log("Error Creating User: ", err)
+      res.status(403).json({ error: "An unknown error occurred" });
+      console.log("Error Creating User: ", err);
     }
   }
 }
@@ -111,3 +123,4 @@ export const resetPassword = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+

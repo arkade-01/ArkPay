@@ -1,22 +1,24 @@
 import express from "express"
 import { signup, signin, signout, forgotPassword, resetPassword } from "../controllers/authController"
+import { protectRoute } from "../middlewares/auth"
 
 const authRouter = express()
 
 //Signup Route
-authRouter.post('/signup',signup )
+authRouter.post('/signup', signup )
 
 // Signin Route
-authRouter.post('/signin', signin)
+authRouter.post('/signin',  signin)
 
 // Signout Route
-authRouter.post('/signout', signout)
+authRouter.post('/signout',  protectRoute ,signout)
 
 // Forgot Password
-authRouter.post('/forgot-password', forgotPassword)
+authRouter.post('/forgot-password',  forgotPassword)
 
 //Reset Password 
-authRouter.post('/reset-password', resetPassword)
+authRouter.post('/reset-password',  resetPassword)
+
 
 
 export default authRouter;

@@ -1,7 +1,7 @@
-import { get } from "http";
-import { createOrder, fetchAccountName, fetchRate, fetchSupportedCurrencies, getInstitutions } from "../services/paymentHelper";
+import { checkOrderStatus, createOrder, fetchAccountName, fetchRate, fetchSupportedCurrencies, getInstitutions } from "../services/paymentHelper";
 import { Response, Request } from "express"
-import { OrderPayload, RatePayload, RateResponse, VerifyAccountPayload } from "../types/types";
+import { OrderPayload,  RateResponse, VerifyAccountPayload } from "../types/types";
+import User from "../models/models";
 
 
 export const getRate = async (req: Request, res: Response) => {
@@ -74,19 +74,37 @@ export const currencies = async (req: Request, res: Response) => {
 
 export const createOrderController = async (req: Request, res: Response) => {
   try {
-    // There's a syntax error in your fetchRate call
+
+    const user = await User.findOne({
+      id: req.user.id
+    });
+    if (!user || !user.institutionCode || !user.bankAccountNumber || !user.accountName) {
+      res.status(400).json({
+        message: "Missing required user banking information",
+        status: "error"
+      });
+      return
+    }
+    // Check if the user has a valid API key
+    // Fetch the rate before creating the order
     const rate : RateResponse  = await fetchRate ({
-      token: "USDC",
+      token: req.body.token,
       currency: "NGN",
       amount: 1
     });
+    console.log(rate)
 
     const payload: OrderPayload = {
       amount: req.body.amount,
       rate: rate.data,
       network: req.body.network,
       token: req.body.token,
-      recipient: req.body.recipient, // This is properly typed as Recipient
+      recipient: {
+        institution: user.institutionCode,
+        accountIdentifier: user.bankAccountNumber.toString(),
+        accountName: user.accountName,
+        memo: req.body.memo
+      }, // This is properly typed as Recipient
       returnAddress: req.body.returnAddress,
       reference: req.body.reference,
       feePercent: req.body.feePercent,
@@ -94,9 +112,32 @@ export const createOrderController = async (req: Request, res: Response) => {
     };
 
     const order = await createOrder(payload);
+    console.log(order)
+    
+    // Create new transaction object
+    const newTransaction = {
+      createdAt: new Date(),
+      orderId: order.id,          // Changed to orderId to match interface
+      amount: Number(order.amount),
+      rate: Number(rate.data),
+      token: order.token,
+      network: order.network,
+      receiveAddress: order.receiveAddress,
+      validUntil: new Date(order.validUntil)
+    };
+
+    // Initialize transactions array if it doesn't exist
+    if (!user.transactions) {
+      user.transactions = [];
+    }
+
+    // Add new transaction to array
+    user.transactions.push(newTransaction);
+
+    await user.save();
 
     res.status(200).json({
-      message: "Payment order initiated successfully",
+      message: "Payment order  initiated successfully",
       status: "success",
       data: order
     });
@@ -110,3 +151,19 @@ export const createOrderController = async (req: Request, res: Response) => {
   }
 }
 
+export const checkOrderStatusController = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id as string;
+    const orderStatus = await checkOrderStatus(id);
+    res.status(200).json({
+      message: "Order status fetched successfully",
+      status: orderStatus,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch order status",
+      status: error,
+    });
+    console.log(error)
+  }
+}

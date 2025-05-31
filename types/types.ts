@@ -43,9 +43,6 @@ export type OrderPayload = {
 }
 
 export type OrderResponse = {
-  message: string;
-  status: 'success' | 'error' | 'pending'; // Including common status values
-  data: {
     id: string;
     amount: string;
     token: string;
@@ -55,7 +52,6 @@ export type OrderResponse = {
     senderFee: string;
     transactionFee: string;
     reference: string;
-  }
 }
 
 export type Transaction = {
