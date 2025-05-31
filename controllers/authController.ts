@@ -22,7 +22,7 @@ export const signup = async (req: Request, res: Response) => {
 
     const token = createToken(user.id);
     res.cookie("jwt", token, { maxAge: 2 * 24 * 60 * 60 * 1000 }); // 2 days
-    res.status(201).json({ user: user._id });
+    res.status(201).json({ user: user.id });
   } catch (err: unknown) {
     if (err instanceof Error) {
       res.status(403).json({ error: err.message });
