@@ -3,7 +3,9 @@ import bcrypt from "bcrypt"
 
 // Define the interface for the User document
 export interface IUser extends Document {
-  _id: string;
+  id: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   apiKey: string | null;
@@ -44,9 +46,22 @@ interface UserInterface extends Model<IUser> {
 }
 
 const userSchema = new Schema ({
+  id: {
+    type: String,
+    default: () => new Date().getTime().toString(), // Generates a unique ID based on timestamp
+    unique: true,
+  },
+  firstName: {
+    type: String,
+    required: false,
+  },
+  lastName: {
+    type: String,
+    required:false,
+  },
   email: {
     type: String,
-    required: [true, 'Please provide an email'],
+    required: false,
     unique: true,
   },
   password: {

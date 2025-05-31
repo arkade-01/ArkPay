@@ -75,7 +75,9 @@ export const currencies = async (req: Request, res: Response) => {
 export const createOrderController = async (req: Request, res: Response) => {
   try {
 
-    const user = await User.findById(req.body.userId);
+    const user = await User.findOne({
+      id: req.user.id
+    });
     if (!user || !user.institutionCode || !user.bankAccountNumber || !user.accountName) {
       res.status(400).json({
         message: "Missing required user banking information",

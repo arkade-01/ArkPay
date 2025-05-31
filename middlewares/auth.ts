@@ -39,7 +39,7 @@ export const protectRoute = (req: Request, res: Response, next: NextFunction) =>
         return res.status(401).json({ error: "Unauthorized" })
       }
       // Extract the user ID from the decoded token and attach it to the request
-      req.user = { _id: decoded.id };
+      req.user = { id: decoded.id };
       next()
     })
   } else {

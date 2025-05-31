@@ -6,7 +6,7 @@ import { getOTP, sendApiKeyEmail } from "../services/emailService";
 
 
 export const signup = async (req: Request, res: Response) => {
-  const {  email, password, country } = req.body;
+  const {  firstName, lastName, email, password, country } = req.body;
   // Generate the API key
   const apiKey = genKey();
 
@@ -15,12 +15,12 @@ export const signup = async (req: Request, res: Response) => {
     const originalApiKey = apiKey;
 
     // Create the user - this will hash the API key in the pre-save hook
-    const user = await User.create({ email, password, apiKey, country });
+    const user = await User.create({ firstName, lastName, email, password, apiKey, country });
 
     // Send the welcome email with API key after successful user creation
     await sendApiKeyEmail(email, originalApiKey);
 
-    const token = createToken(user._id);
+    const token = createToken(user.id);
     res.cookie("jwt", token, { maxAge: 2 * 24 * 60 * 60 * 1000 }); // 2 days
     res.status(201).json({ user: user._id });
   } catch (err: unknown) {

@@ -10,7 +10,7 @@ payRouter.get('/currencies', validateKey, currencies)
 
 payRouter.get('/banks', validateKey, banks)	
 
-payRouter.post('/account-name', validateKey, verifyAccount)
+payRouter.post('/account-name', verifyAccount)
 
 payRouter.post('/createOrder', validateKey, createOrderController)
 

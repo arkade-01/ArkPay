@@ -3,8 +3,10 @@ import User from "../models/models"
 import { checkOrderStatus } from "../services/paymentHelper"
 
 export const getUserTransactions = async (req: Request, res: Response) => {
-  const userId = req.user._id
-  const user = await User.findById(userId)
+  const userId = req.user.id
+  const user = await User.findOne({
+    id: userId
+  })
   if (!user) {
     res.status(404).json({ error: 'user not found' })
     return

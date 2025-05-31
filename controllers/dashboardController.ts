@@ -2,8 +2,10 @@ import { Response, Request } from "express"
 import User from "../models/models"
 
 export const getMetrics = async (req: Request, res: Response) => {
-  const userId = req.user._id
-  const user = await User.findById(userId)
+  const userId = req.user.id
+  const user = await User.findOne({
+    id: userId
+  })
   if (!user) {
     res.status(404).json({ error: 'user not found' })
     return
@@ -28,8 +30,10 @@ export const getMetrics = async (req: Request, res: Response) => {
 }
 
 export const getRecentTransactions = async (req: Request, res: Response) => {
-  const userId = req.user._id
-  const user = await User.findById(userId)
+  const userId = req.user.id
+  const user = await User.findOne({
+    id: userId
+  })
   if (!user) {
     res.status(404).json({ error: 'user not found' })
     return
