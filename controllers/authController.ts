@@ -42,7 +42,7 @@ export const signin = async (req: Request, res: Response) => {
   try {
     const user = await User.signIn(email, password)
     const token = createToken(user.id)
-    res.cookie("jwt", token, { maxAge: 2 * 24 * 60 * 60 * 1000, httpOnly: true, secure: false, sameSite: "none" }) // 2 days // htppOnly - reminder
+    res.cookie("jwt", token, { maxAge: 2 * 24 * 60 * 60 * 1000, httpOnly: true }) // 2 days // htppOnly - reminder
     res.status(200).json({ message: "User Signed In" })
   } catch (err: unknown) {
     // Type guard to check if err is an Error object
