@@ -1,5 +1,5 @@
 import express from "express"
-import { signup, signin, signout, forgotPassword, resetPassword } from "../controllers/authController"
+import { signup, signin, signout, forgotPassword, resetPassword, fetchUser } from "../controllers/authController"
 import { protectRoute } from "../middlewares/auth"
 
 const authRouter = express()
@@ -18,6 +18,10 @@ authRouter.post('/forgot-password',  forgotPassword)
 
 //Reset Password 
 authRouter.post('/reset-password',  resetPassword)
+
+
+//Fetch user details
+authRouter.get('/me', protectRoute, fetchUser)
 
 
 

@@ -4,41 +4,9 @@ import {Response, Request} from "express"
 import { sendApiKeyEmail } from "../services/emailService";
 
 
-export const fetchUser = async (req: Request, res: Response) => {
-  const userId = req.user.id;
-  try {
-    const user = await User.findOne({
-      id: userId
-    });
-    if (!user) {
-      res.status(404).json({ error: 'User not found' });
-      return;
-    }
-
-    // Create a sanitized user object without password and API key
-    const sanitizedUser = {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      country: user.country,
-      bankName: user.bankName,
-      bankAccountNumber: user.bankAccountNumber,
-      accountName: user.accountName,
-      apiUsage: user.apiUsage,
-      transactions: user.transactions,
-    };
-
-    res.status(200).json({ user: sanitizedUser });
-    return;
-  } catch (error) {
-    res.status(500).json({ error: error });
-    return;
-  }
-};
 
 export const updateUser = async (req: Request, res: Response) => {
-  const userId = req.user._id;
+  const userId = req.user.id;
   const {
     firstName,
     lastName,
@@ -79,7 +47,7 @@ export const updateUser = async (req: Request, res: Response) => {
 };
 
 export const updateUserPayout = async (req: Request, res: Response) => {
-  const userId = req.user._id;
+  const userId = req.user.id;
   const { payoutCurrency } = req.body;
   try {
     const user = await User.findOne({
@@ -104,7 +72,7 @@ export const updateUserPayout = async (req: Request, res: Response) => {
 export const resetAPIKey = async (req: Request, res: Response) => {
   try {
     // The user ID is available from the JWT token
-    const userId = req.user._id;
+    const userId = req.user.id;
 
     // Generate new API key
     const newApiKey = genKey();
