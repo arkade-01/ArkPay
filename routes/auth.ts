@@ -19,7 +19,6 @@ authRouter.post('/forgot-password',  forgotPassword)
 //Reset Password 
 authRouter.post('/reset-password',  resetPassword)
 
-
 //Fetch user details
 authRouter.get('/me', protectRoute, fetchUser)
 
