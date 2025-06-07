@@ -8,7 +8,7 @@ import { sendApiKeyEmail } from "../services/emailService";
 export const resetAPIKey = async (req: Request, res: Response) => {
   try {
     // The user ID is available from the JWT token
-    const userId = req.user._id;
+    const userId = req.user.id;
 
     // Generate new API key
     const newApiKey = genKey();
