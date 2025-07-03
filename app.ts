@@ -19,7 +19,7 @@ const start = async () => {
 
       //middlewares
         app.use(cors({
-          origin: 'http://localhost:5173', // Replace with your frontend URL
+          // origin: 'http://localhost:5173', // Allow requests from this origin
           credentials: true, // Allow cookies to be sent
     }))
         app.use(cookieParser())
