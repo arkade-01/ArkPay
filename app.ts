@@ -8,8 +8,6 @@ import bodyParser from "body-parser";
 import cookieParser from 'cookie-parser';
 
 
-
-
 const start = async () => {
     try {
         await connectToDatabase();
@@ -19,7 +17,7 @@ const start = async () => {
 
       //middlewares
         app.use(cors({
-          // origin: 'http://localhost:5173', // Allow requests from this origin
+          origin: 'http://localhost:5173', // Allow requests from this origin
           credentials: true, // Allow cookies to be sent
     }))
         app.use(cookieParser())
