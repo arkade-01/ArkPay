@@ -1,0 +1,11 @@
+export const getInstitutions = async (
+  currency: string
+): Promise<InstitutionProps> => {
+  try {
+    const response = await api.get(`/institutions/${currency}`);
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching supported institutions:", error);
+    throw error;
+  }
+};
